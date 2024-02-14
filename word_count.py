@@ -13,20 +13,21 @@
 #     ('text2.txt'. 'hypotheses.')
 #   ]
 #
-
 import glob
 import fileinput
 from itertools import groupby
-import os.path
+import os
+
 def load_input(input_directory):
     filenames = glob.glob(input_directory + "/*.*")
     sequence = []
+
     with fileinput.input(files=filenames) as f:
-        for line in f:
-            sequence.append(
-                (f.filename(), line)
-            )
-    return sequence       
+        for line in f: 
+            sequence.append((f.filename(), line))
+
+    return sequence    
+
 
 #
 # Escriba una función llamada maper que recibe una lista de tuplas de la
@@ -41,9 +42,12 @@ def load_input(input_directory):
 #   ]
 #
 def mapper(sequence):
-
-    new_sequence = [(word.lower().replace(".","").replace(",",""), 1)    for _, line in sequence for word in line.split()]
+    new_sequence = [
+        (word.lower().replace(".", "").replace(",", ""), 1) 
+        for _, line in sequence for word in line.split()] 
+    
     return new_sequence
+
 
 #
 # Escriba la función shuffle_and_sort que recibe la lista de tuplas entregada
@@ -57,11 +61,10 @@ def mapper(sequence):
 #   ]
 #
 def shuffle_and_sort(sequence):
-    sequence = sorted(
-        sequence,
-        key=lambda x: x[0]
-    )
+    sequence = sorted(sequence, key=lambda x: x[0])
+
     return sequence
+
 
 #
 # Escriba la función reducer, la cual recibe el resultado de shuffle_and_sort y
@@ -71,13 +74,14 @@ def shuffle_and_sort(sequence):
 #
 def reducer(sequence):
     new_sequence = []
+
     for k, g in groupby(sequence, lambda x: x[0]):
         key = k
-        values = sum(x[1]  for x in g)
-        new_sequence.append(
-            (key, values)
-        )
-    return new_sequence   
+        value = sum([x[1] for x in g])
+        new_sequence.append((key, value))
+
+    return new_sequence
+
 
 #
 # Escriba la función create_ouptput_directory que recibe un nombre de directorio
@@ -88,6 +92,7 @@ def create_ouptput_directory(output_directory):
         raise Exception("El directorio ya existe")
     os.mkdir(output_directory)
 
+
 #
 # Escriba la función save_output, la cual almacena en un archivo de texto llamado
 # part-00000 el resultado del reducer. El archivo debe ser guardado en el
@@ -96,30 +101,30 @@ def create_ouptput_directory(output_directory):
 # elemento es la clave y el segundo el valor. Los elementos de la tupla están
 # separados por un tabulador.
 #
-
-
 def save_output(output_directory, sequence):
-    # concatenar con os el nombre del directorio y el archivo
     filename = os.path.join(output_directory, "part-00000")
+
     with open(filename, "w") as f:
-        for k, v in sequence:
-            f.write(f"{k}\t{v}\n")
-     
+        for key, value in sequence:
+            f.write(f"{key}\t{value}\n")
+
+
 #
 # La siguiente función crea un archivo llamado _SUCCESS en el directorio
 # entregado como parámetro.
 #
 def create_marker(output_directory):
     with open(os.path.join(output_directory, "_SUCCESS"), "w") as f:
-        f.whrite("")
-        
+        f.write("")
+
+
 #
 # Escriba la función job, la cual orquesta las funciones anteriores.
 #
 def job(input_directory, output_directory):
     sequence = load_input(input_directory)
     sequence = mapper(sequence)
-    sequence = shuffle_and_sort(sequence)
+    sequence= shuffle_and_sort(sequence)
     sequence = reducer(sequence)
     create_ouptput_directory(output_directory)
     save_output(output_directory, sequence)
