@@ -13,6 +13,7 @@
 #     ('text2.txt'. 'hypotheses.')
 #   ]
 #
+
 import glob
 import fileinput
 from itertools import groupby
@@ -26,8 +27,6 @@ def load_input(input_directory):
                 (f.filename(), line)
             )
     return sequence       
-
-
 
 #
 # Escriba una función llamada maper que recibe una lista de tuplas de la
@@ -45,7 +44,6 @@ def mapper(sequence):
 
     new_sequence = [(word.lower().replace(".","").replace(",",""), 1)    for _, line in sequence for word in line.split()]
     return new_sequence
-
 
 #
 # Escriba la función shuffle_and_sort que recibe la lista de tuplas entregada
@@ -65,7 +63,6 @@ def shuffle_and_sort(sequence):
     )
     return sequence
 
-
 #
 # Escriba la función reducer, la cual recibe el resultado de shuffle_and_sort y
 # reduce los valores asociados a cada clave sumandolos. Como resultado, por
@@ -82,7 +79,6 @@ def reducer(sequence):
         )
     return new_sequence   
 
-
 #
 # Escriba la función create_ouptput_directory que recibe un nombre de directorio
 # y lo crea. Si el directorio existe, la función falla.
@@ -91,7 +87,6 @@ def create_ouptput_directory(output_directory):
     if os.path.isdir(output_directory):
         raise Exception("El directorio ya existe")
     os.mkdir(output_directory)
-
 
 #
 # Escriba la función save_output, la cual almacena en un archivo de texto llamado
