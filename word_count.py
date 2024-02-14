@@ -109,8 +109,7 @@ def save_output(output_directory, sequence):
     with open(filename, "w") as f:
         for k, v in sequence:
             f.write(f"{k}\t{v}\n")
-    
-        
+     
 #
 # La siguiente función crea un archivo llamado _SUCCESS en el directorio
 # entregado como parámetro.
@@ -119,14 +118,6 @@ def create_marker(output_directory):
     with open(os.path.join(output_directory, "_SUCCESS"), "w") as f:
         f.whrite("")
         
-
-sequence = load_input("input/")
-sequence = mapper(sequence)
-sequence = shuffle_and_sort(sequence)
-sequence = reducer(sequence)
-create_ouptput_directory("output/")
-save_output("output/", sequence)
-create_marker("output/")
 #
 # Escriba la función job, la cual orquesta las funciones anteriores.
 #
